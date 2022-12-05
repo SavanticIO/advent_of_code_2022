@@ -23,11 +23,11 @@ public class Day03
             count++;
             tempContainerGroup.Add(cont);
             if (count != 3) continue;
-            count = 0;
             ContainerManager.RegisterContainerGroup(tempContainerGroup);
+            count = 0;
+            tempContainerGroup.Clear();
         }
-
-        var check = ContainerManager.AllContainerGroups;
+        
         Console.WriteLine($"Container Priorities Sum: {ContainerManager.CalculatePrioritiesSum(ContainerManager.ContainersBySharedItemType)}");
         Console.WriteLine($"ContainerGroup Priorities Sum: {ContainerManager.CalculatePrioritiesSum(ContainerManager.ContainerGroupsBySharedItemType)}");
     }

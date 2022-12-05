@@ -71,51 +71,36 @@ public class ContainerGroup
 
     public char GetSharedItemType()
     {
-        var prim = new bool[52];
+        var prim = new HashSet<char>();
         var itemType = '\0';
-
-        for (var i = 0; i < prim.Length; i++)
-        {
-            prim[i] = true;
-        }
 
         foreach (var container in _containers)
         {
-            var sec = new bool[52];
-            for (var i = 0; i < sec.Length; i++)
+            var sec = new HashSet<char>();
+            if (prim.Count == 0)
             {
-                sec[i] = false;
-            }
-
-            foreach (var c in container.AllItems)
-            {
-                if (c+26 - 'A' >= 0 && c+26 - 'A' <= prim.Length && prim[c - 'A'])
+                foreach (var c in container.AllItems)
                 {
-                    sec[c - 'A'] = true;
-                }
-                if (c - 'a' >= 0 && c - 'a' <= prim.Length && prim[c - 'a'])
-                {
-                    sec[c - 'a'] = true;
+                    sec.Add(c);
                 }
             }
-
-            Array.Copy(sec, 0, prim, 0, 52);
-
-            for (var i = 0; i < prim.Length; i++)
+            else
             {
-                if (prim[i])
+                foreach (var c in container.AllItems)
                 {
-                    if (i < 27)
+                    if (prim.Contains(c))
                     {
-                        itemType = (char)(i + 97);
+                        sec.Add(c);
                     }
-                    else
-                    {
-                        itemType = (char)(i + 65);
-                    }
-
                 }
             }
+            prim = sec.ToHashSet();
+            
+        }
+
+        foreach (var c in prim)
+        {
+            itemType = c;
         }
         return itemType;
     }
